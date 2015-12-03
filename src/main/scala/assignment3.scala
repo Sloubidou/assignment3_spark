@@ -3,7 +3,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
-import org.apache.spark.rdd.DoubleRDDFunctions
+//import org.apache.spark.sql.SQLContext
 
 object SimpleApp {
 
@@ -29,7 +29,6 @@ object SimpleApp {
 	 		val l = line.split(",") 
 	 		Crimes(l(0), l(1), l(2), l(3), l(4), l(5), l(6), l(7), l(8))
 	 		})
-
 
 
 	 	/***************************** First question RDD**************************/
@@ -66,20 +65,18 @@ object SimpleApp {
 	 	meanCrimeTypeDay.foreach(println)
 
 
-
 	 	/******************************Part Two **********************************/
+
 
 	 	val pairsCrimeDist= crimesClass.map( line => (line.district, 1))
 	 	val countsDist = pairsCrimeDist.reduceByKey((a, b) => a + b)
 	 	val crimeDistDay = countsDist.map(line => (line._1, line._2.toFloat/31))
-		crimeDistDay.map(line => (line._1+","+line._2)).saveAsTextFile("file","txt")
-	 	crimeDistDay.foreach(println)
+		val output = crimeDistDay.map( line => Array(line._1, line._2).mkString(","))
+
+		//val blabla = crimeDistDay.map{(key,value) => Array(key, value).mkString(",")}
+		output.saveAsTextFile("output.txt")
+
 
 
   }
 }
-
-
-// case class Crimes(cdatetime:String,address:String,district:Int,beat:String,grid:Int,crimedescr:String,ucr_ncic_code:Int,latitude:Float,longitude:Float)
-// val file = sc.textFile("crimes.csv").mapPartitionsWithIndex { (idx, iter) => if (idx == 0) iter.drop(1) else iter }
-// val crimes = file.map(line => { val l = line.split(";") Crimes(l(0), l(1), l(2).toInt, l(3), l(4).toInt, l(5), l(6), l(7).toInt, l(8).toFloat, l(9).toFloat)})
