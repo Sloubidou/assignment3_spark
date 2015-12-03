@@ -3,6 +3,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
+import org.apache.spark.rdd.DoubleRDDFunctions
 
 object SimpleApp {
 
@@ -44,10 +45,8 @@ object SimpleApp {
  	ordered.foreach(println)
 
  	/***************************** Third question RDD*************************/
- 	val values = new DoubleRDDFunctions(countsDays.values())
- 	val mean = values.mean()
- 	println(s"Average crimes : $mean")
-
+ 	val values = countsDays.map(line => line._2).mean()
+ 	println(s"MOYENNE CRIMES PAR JOUR: $values")
   }
 }
 
