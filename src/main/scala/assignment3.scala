@@ -21,7 +21,7 @@ object SimpleApp {
     val file = sc.textFile("crimes.csv")
     val crimes = file.mapPartitionsWithIndex { (idx, iter) => if (idx == 0) iter.drop(1) else iter }
   	
- 	val crimesClass = file.map(line => { 
+ 	val crimesClass = crimes.map(line => { 
  		val l = line.split(",") 
  		Crimes(l(0), l(1), l(2), l(3), l(4), l(5), l(6), l(7), l(8))
  		})
@@ -52,6 +52,18 @@ object SimpleApp {
 
  	val meanCrimeTypeDay = countsType.map(line => (line._1, line._2.toFloat/31))
  	meanCrimeTypeDay.foreach(println)
+
+
+
+ 	/******************************Part Two **********************************/
+
+ 	val pairsCrimeDist= crimesClass.map( line => (line.district, 1))
+ 	val countsDist = pairsCrimeDist.reduceByKey((a, b) => a + b)
+ 	val crimeDistDay = countsDist.map(line => (line._1, line._2.toFloat/31))
+	crimeDistDay.map(line => (line._1+","+line._2)).saveAsTextFile("file","txt")
+ 	crimeDistDay.foreach(println)
+
+
   }
 }
 
