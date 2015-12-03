@@ -44,9 +44,17 @@ object SimpleApp {
  	ordered.foreach(println)
 
  	/***************************** Third question RDD*************************/
- 	val values = countsDays.values
- 	val mean = values.mean
- 	println(s"Average crimes : $mean")
+ 	val pairsCrimeDays2 = crimesClass.map( line => { 
+ 		val tutu = line.cdatetime.split(" ") 
+ 		(tutu(0) + " " + line.crimedescr, 1) 
+ 		})
+ 	val countsCrimeDays = pairsCrimeDays2.reduceByKey((a, b) => a + b)
+ 	val countsCrimeDays2 = countsCrimeDays.map( line => {
+ 		val toto = line._1.split(" ")
+ 		(toto(1), line._2)
+ 		})
+ 	val avgCrimeDays = countsCrimeDays2.reduceByKey((a,b) => (a+b)/2)
+ 	avgCrimeDays.foreach(println)
 
   }
 }
