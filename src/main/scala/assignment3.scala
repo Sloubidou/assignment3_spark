@@ -45,8 +45,15 @@ object SimpleApp {
  	ordered.foreach(println)
 
  	/***************************** Third question RDD*************************/
+/*
  	val values = countsDays.map(line => line._2).mean()
- 	println(s"MOYENNE CRIMES PAR JOUR: $values")
+ 	println(s"MOYENNE CRIMES PAR JOUR: $values")*/
+
+ 	val values = countsDays.values
+ 	val mean = values.mean
+ 	println(s"Average crimes : $mean")
+
+
   }
 }
 
