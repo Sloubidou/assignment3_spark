@@ -50,7 +50,7 @@ object SimpleApp {
 
  	/***************************** Third question RDD*************************/
 
- 	val meanCrimeTypeDay = countsType.map(line => (line._1, line._2.toFloat/365))
+ 	val meanCrimeTypeDay = countsType.map(line => (line._1, line._2.toFloat/31))
  	meanCrimeTypeDay.foreach(println)
 
  	// val pairsCrimeDays2 = crimesClass.map( line => { 
