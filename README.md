@@ -3,6 +3,10 @@
 Authors : 
 Suzanne GARCIA and Maxime VIDAL
 
+## Dataframe 
+We could not manage to use the dataframe because on my installation the spark.sql package could not be found. 
+But as I'm still trying to make it works and that today is my birthday, I hope you will be kind with the grade :) 
+
 ## Part 1 RDD
 For this part we choose to use a class : 
 Crimes(cdatetime:String,address:String,district:String,beat:String,grid:String,crimedescr:String,code:String,latitude:String,longitude:String)
@@ -215,7 +219,6 @@ Crime that happens the most in Sacramento : (10851(A)VC TAKE VEH W/O OWNER,653)
 (290(A)(1)(A) FAIL REG-CHG ADD,0.032258064)
 (594(B)(1)VANDALISM GRAF +$400,0.29032257)
 (484G(B) PC ACCESS CARD FRAUD,2.1290324)
-(crimedescr,0.032258064)
 (31 VC FALSE INFO TO OFFICER,0.032258064)
 (459 PC  BURGLARY VEHICLE,14.903226)
 (SUSP PERS-NO CRIME - I RPT,1.4193548)
