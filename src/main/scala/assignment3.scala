@@ -52,23 +52,6 @@ object SimpleApp {
 
  	val meanCrimeTypeDay = countsType.map(line => (line._1, line._2.toFloat/31))
  	meanCrimeTypeDay.foreach(println)
-
- 	// val pairsCrimeDays2 = crimesClass.map( line => { 
- 	// 	val tutu = line.cdatetime.split(" ") 
- 	// 	(tutu(0) + " " + line.code, 1) 
- 	// 	})
- 	// val countsCrimeDays = pairsCrimeDays2.reduceByKey((a, b) => a + b)
- 	// val countsCrimeDays2 = countsCrimeDays.map( line => {
- 	// 	val toto = line._1.split(" ")
- 	// 	(toto(1), line._2)
- 	// 	})
- 	// val grpCrimeDays = countsCrimeDays2.groupByKey()
- 	// val avgCrimeDays = grpCrimeDays.map( line => {
- 	// 	(line._1, average(line._2))
- 	// 	})
- 	// avgCrimeDays.foreach(println)
-
- 	//
   }
 }
 
