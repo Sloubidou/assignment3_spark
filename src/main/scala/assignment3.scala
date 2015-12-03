@@ -8,6 +8,10 @@ object SimpleApp {
 
 	case class Crimes(cdatetime:String,address:String,district:String,beat:String,grid:String,crimedescr:String,code:String,latitude:String,longitude:String)
 
+  def average[T]( ts: Iterable[T] )( implicit num: Numeric[T] ) = {
+	num.toDouble( ts.sum ) / ts.size
+  }
+
   def main(args: Array[String]) {
     val conf = new SparkConf().setAppName("Assignment3")
     val sc = new SparkContext(conf)
@@ -53,7 +57,10 @@ object SimpleApp {
  		val toto = line._1.split(" ")
  		(toto(1), line._2)
  		})
- 	val avgCrimeDays = countsCrimeDays2.reduceByKey((a,b) => (a+b)/2)
+ 	val grpCrimeDays = countsCrimeDays2.groupByKey()
+ 	val avgCrimeDays = grpCrimeDays.map( line => {
+ 		(line._1, average(line._2))
+ 		})
  	avgCrimeDays.foreach(println)
 
   }
