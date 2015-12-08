@@ -3,7 +3,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
-//import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.SQLContext
 
 object SimpleApp {
 
@@ -65,18 +65,39 @@ object SimpleApp {
 	 	meanCrimeTypeDay.foreach(println)
 
 
+	 	/******************************First question DataFrame **********************************/
+	 	val sqlContext= new org.apache.spark.sql.SQLContext(sc)
+
+	 	val crimesSQLClass = file.map(line => { 
+	 		val l = line.split(",") 
+	 		Crimes(l(0), l(1), l(2), l(3), l(4), l(5), l(6), l(7), l(8))
+	 		})
+	 	import sqlContext.implicits._
+
+	 	val sqlCrimes = crimesSQLClass.toDF
+	 	sqlCrimes.show()
+
+	 	sqlCrimes.groupBy('crimedescr).count().orderBy('count.desc).show()
+
+	 	/******************************First question DataFrame **********************************/
+	 	val sqlDays = crimesSQLClass.map( line => { 
+	 		val tutu = line.cdatetime.split(" ") 
+	 		(tutu(0), 1) 
+	 		})
+	 	val sqlDaysDF = sqlDays.toDF
+	 	sqlDaysDF.show
+	 	sqlDaysDF.groupBy('_1).count().orderBy('count.desc).show()
+
 	 	/******************************Part Two **********************************/
 
 
-	 	val pairsCrimeDist= crimesClass.map( line => (line.district, 1))
-	 	val countsDist = pairsCrimeDist.reduceByKey((a, b) => a + b)
-	 	val crimeDistDay = countsDist.map(line => (line._1, line._2.toFloat/31))
-		val output = crimeDistDay.map( line => Array(line._1, line._2).mkString(","))
+	 // 	val pairsCrimeDist= crimesClass.map( line => (line.district, 1))
+	 // 	val countsDist = pairsCrimeDist.reduceByKey((a, b) => a + b)
+	 // 	val crimeDistDay = countsDist.map(line => (line._1, line._2.toFloat/31))
+		// val output = crimeDistDay.map( line => Array(line._1, line._2).mkString(","))
 
-		//val blabla = crimeDistDay.map{(key,value) => Array(key, value).mkString(",")}
-		output.saveAsTextFile("output.txt")
-
-
+		// //val blabla = crimeDistDay.map{(key,value) => Array(key, value).mkString(",")}
+		// output.saveAsTextFile("output.txt")
 
   }
 }
