@@ -18,8 +18,12 @@ object SimpleApp {
 	    val conf = new SparkConf().setAppName("Assignment3")
 	    val sc = new SparkContext(conf)
 
+
+
 		//case class Crimes(cdatetime:String,address:String,district:String,beat:String,grid:String,crimedescr:String,code:String,latitude:String,longitude:String)
 	    val file = sc.textFile("crimes.csv") //path of the file for me
+
+	    
 	    //we read the crimes file and delete the header line
 	    val crimes = file.mapPartitionsWithIndex { (idx, iter) => if (idx == 0) iter.drop(1) else iter }
 	  	
@@ -32,6 +36,7 @@ object SimpleApp {
 
 
 	 	/***************************** First question RDD**************************/
+
 	 	//we create a pair with the class crimedescription element
 	 	val pairsCrimeType = crimesClass.map(l => (l.crimedescr,1))
 	 	//we reduce it to create a map containing (crimedescription, number of crimes for the descrition)
@@ -43,7 +48,9 @@ object SimpleApp {
 		})
 	 	println(s"Crime that happens the most in Sacramento : $max")
 
+
 	 	/***************************** Second question RDD*************************/
+
 	 	//We create a pair with the class where we isolat the date from the cdatetime column and match it with a 1 we get (date, 1)
 	 	val pairsCrimeDays = crimesClass.map( line => { 
 	 		val tutu = line.cdatetime.split(" ") 
@@ -65,6 +72,8 @@ object SimpleApp {
 	 	meanCrimeTypeDay.foreach(println)
 
 
+
+
 	 	/******************************First question DataFrame **********************************/
 	 	val sqlContext= new org.apache.spark.sql.SQLContext(sc)
 
@@ -77,9 +86,9 @@ object SimpleApp {
 	 	val sqlCrimes = crimesSQLClass.toDF
 	 	sqlCrimes.show()
 
-	 	sqlCrimes.groupBy('crimedescr).count().orderBy('count.desc).show()
+	 	val crimesPerType = sqlCrimes.groupBy('crimedescr).count().orderBy('count.desc)
 
-	 	/******************************First question DataFrame **********************************/
+	 	/******************************Second question DataFrame **********************************/
 	 	val sqlDays = crimesSQLClass.map( line => { 
 	 		val tutu = line.cdatetime.split(" ") 
 	 		(tutu(0), 1) 
@@ -87,6 +96,13 @@ object SimpleApp {
 	 	val sqlDaysDF = sqlDays.toDF
 	 	sqlDaysDF.show
 	 	sqlDaysDF.groupBy('_1).count().orderBy('count.desc).show()
+
+	 	/******************************Third question DataFrame **********************************/
+	 	
+	 	//val crimesPerTypePerDay = sqlCrimes.groupBy('crimedescr).count().orderBy('count.desc)
+
+	 	//sqlContext.sql("SELECT crimedescr, COUNT(*)/31 AS count FROM crimes GROUP BY crimedescr ORDER BY count DESC ").collect().foreach(println)
+
 
 	 	/******************************Part Two **********************************/
 
